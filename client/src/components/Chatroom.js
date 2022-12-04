@@ -21,7 +21,8 @@ function Chatroom() {
         //socket has two methods: "on" and "emit"
         //socket.emit can be used to send something. In this case we send a request client > server
         //we use "getPreviousMessages" to get all messages that were stored in the server, the ones before the client connected.
-        //The way "getPreviousMessages" is used here is really similar to making a standard GET request.
+        //The way "getPreviousMessages" is used here is really similar to making a standard GET request. We only want to do this
+        //the first time though. Alternatively, I could have used a new useEffect.
         if (!messages || messages.length === 0) {
             socket.emit('getPreviousMessages');
         }
@@ -47,6 +48,10 @@ function Chatroom() {
         //And that is it for the useEffect! To summarize: we make a request to get all previous messages, next we use the response to place the new ones
         //and finally, we also declare what should happen when a single message is received from the server.
     }, [messages]);
+    //Note: messages is a dependency here (it is inside the array), why? Every time a new message is received, the endpoint
+    //is looking at "messages" (from line 15). Because the state of messages is being updated after every received message, we also
+    //need to update the socket endpoint itself. If messages is inside the array, the update will happen
+    //every time a message is received.
 
     //The final thing we need to do is to make a function that is being activated when the button is pressed. I will name this sendMessage.
     const sendMessage = () => {
@@ -58,17 +63,21 @@ function Chatroom() {
 
     return (
         <>
+            {/* Input for name */}
             <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Name"
             />
+            {/* Input for message */}
             <input
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Message"
             />
             <button onClick={() => sendMessage()}>Send message</button>
+
+            {/* Mapping over the messages, this will update whenever a new message is being sent */}
             {messages.map((i, index) => {
                 return (
                     <div key={index}>
