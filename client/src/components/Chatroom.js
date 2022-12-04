@@ -7,7 +7,7 @@ function Chatroom() {
 
     //UseState to store the name and message inputs of the user, you can use Redux here whatever you want
     const [name, setName] = useState('');
-    const [message, setMessage] = useState([]);
+    const [message, setMessage] = useState('');
 
     //The messages will be stored in an array, which starts out empty. Note: through this whole file I use message and messages, keep in mind that one is plural!
     //Message (singular) is used for the input of the user
