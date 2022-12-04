@@ -10,8 +10,8 @@ function Chatroom() {
     const [message, setMessage] = useState('');
 
     //The messages will be stored in an array, which starts out empty. Note: through this whole file I use message and messages, keep in mind that one is plural!
-    //Message (singular) is used for the input of the user
-    //Messages (plural) is used to store all messages that are known to the server
+    //Message (singular) is used for the input of the user, and is a string
+    //Messages (plural) is used to store all messages that are known to the server, and is an array
     const [messages, setMessages] = useState([]);
 
     //We need to use a useEffect. Why? We declare whatever should happen when the socket is receiving a message. If we would not wrap this in useEffect
@@ -32,7 +32,7 @@ function Chatroom() {
             //We want to add all the previous messages to the array.
             const newMessages = [];
             oldMessages.map((i) => {
-                //For each stored previous message, we are going to push the item into the oldMessages array
+                //For each stored previous message, we are going to push the item into the newMessages array
                 newMessages.push(i);
             });
             //Next we change the state of our empty array (from line 15)
@@ -75,6 +75,7 @@ function Chatroom() {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Message"
             />
+            {/* Button for sending the message */}
             <button onClick={() => sendMessage()}>Send message</button>
 
             {/* Mapping over the messages, this will update whenever a new message is being sent */}
